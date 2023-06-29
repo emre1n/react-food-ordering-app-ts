@@ -1,5 +1,5 @@
 export default interface IMeals {
-  id: string;
+  id: number;
   name: string;
   description: string;
   price: number;
