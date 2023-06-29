@@ -10,9 +10,9 @@ const AvailableMeals = () => {
 
   useEffect(() => {
     const fetchMeals = async () => {
-      const response = await fetch('/api');
+      const response = await fetch('/api/meals');
       const responseData = await response.json();
-      setMeals(responseData.meals);
+      setMeals(responseData);
     };
 
     fetchMeals();
@@ -20,7 +20,7 @@ const AvailableMeals = () => {
 
   const mealsList = meals.map(meal => (
     <MealItem
-      id={meal.id}
+      id={meal.id.toString()}
       key={meal.id}
       name={meal.name}
       description={meal.description}
