@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import styles from './styles.module.css';
 
 type TProps = {
@@ -5,31 +6,44 @@ type TProps = {
 };
 
 const Checkout = ({ onCancel }: TProps) => {
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const streetInputRef = useRef<HTMLInputElement>(null);
+  const postalCodeInputRef = useRef<HTMLInputElement>(null);
+  const cityInputRef = useRef<HTMLInputElement>(null);
+
   const confirmHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const enteredName = nameInputRef.current?.value;
+    const enteredStreet = streetInputRef.current?.value;
+    const enteredPostalCode = postalCodeInputRef.current?.value;
+    const enteredCity = cityInputRef.current?.value;
   };
+
   return (
-    <form>
+    <form className={styles.form} onSubmit={confirmHandler}>
       <div className={styles.control}>
         <label htmlFor="name">Your Name</label>
-        <input type="text" id="name" />
+        <input type="text" id="name" ref={nameInputRef} />
       </div>
       <div className={styles.control}>
         <label htmlFor="street">Street</label>
-        <input type="text" id="street" />
+        <input type="text" id="street" ref={streetInputRef} />
       </div>
       <div className={styles.control}>
         <label htmlFor="postal">Postal Code</label>
-        <input type="text" id="postal" />
+        <input type="text" id="postal" ref={postalCodeInputRef} />
       </div>
       <div className={styles.control}>
         <label htmlFor="city">City</label>
-        <input type="text" id="city" />
+        <input type="text" id="city" ref={cityInputRef} />
       </div>
-      <button type="button" onClick={onCancel}>
-        Cancel
-      </button>
-      <button>Confirm</button>
+      <div className={styles.actions}>
+        <button type="button" onClick={onCancel}>
+          Cancel
+        </button>
+        <button className={styles.submit}>Confirm</button>
+      </div>
     </form>
   );
 };
