@@ -25,11 +25,12 @@ model Cartitem {
 }
 
 model Order {
-  id          Int    @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   street      String
   city        String
   postalCode  String
   cartSummary String
-  cartTotal   Float  @db.DoublePrecision
+  cartTotal   Float    @db.DoublePrecision
+  orderDate   DateTime
 }
