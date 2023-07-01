@@ -17,7 +17,7 @@ type OrderWrite = {
   city: string;
   postalCode: string;
   cartSummary: string;
-  cartTotal: number;
+  cartTotal: string;
   orderDate: Date;
 };
 
@@ -58,7 +58,7 @@ export const createOrder = async (order: OrderWrite): Promise<OrderRead> => {
   const { name, street, city, postalCode, cartSummary, cartTotal, orderDate } =
     order;
   const parsedDate: Date = new Date(orderDate);
-
+  const parsedCartTotal = parseFloat(cartTotal);
   return db.order.create({
     data: {
       name,
@@ -66,7 +66,7 @@ export const createOrder = async (order: OrderWrite): Promise<OrderRead> => {
       city,
       postalCode,
       cartSummary,
-      cartTotal,
+      cartTotal: parsedCartTotal,
       orderDate: parsedDate,
     },
     select: {
@@ -88,6 +88,7 @@ export const updateOrder = async (
 ): Promise<OrderRead> => {
   const { name, street, city, postalCode, cartSummary, cartTotal, orderDate } =
     order;
+  const parsedCartTotal = parseFloat(cartTotal);
   return db.order.update({
     where: {
       id,
@@ -98,7 +99,7 @@ export const updateOrder = async (
       city,
       postalCode,
       cartSummary,
-      cartTotal,
+      cartTotal: parsedCartTotal,
       orderDate,
     },
     select: {

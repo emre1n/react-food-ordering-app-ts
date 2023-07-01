@@ -37,9 +37,9 @@ orderRouter.post(
   body('street').isString(),
   body('city').isString(),
   body('postalCode').isString(),
-  body('cardSummary').isString(),
-  body('cartTotal').isFloat(),
-  body('orderDate').isDate().toDate(),
+  body('cartSummary').isString(),
+  body('cartTotal').isString(),
+  body('orderDate').isISO8601(),
   async (request: Request, response: Response) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
