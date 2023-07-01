@@ -6,9 +6,10 @@ const isFiveChars = (value: string) => value.trim().length === 5;
 
 type TProps = {
   onCancel: () => void;
+  onConfirm: (userData: any) => void;
 };
 
-const Checkout = ({ onCancel }: TProps) => {
+const Checkout = ({ onCancel, onConfirm }: TProps) => {
   const [formInputValidity, setFormInputValidity] = useState({
     name: true,
     street: true,
@@ -50,7 +51,12 @@ const Checkout = ({ onCancel }: TProps) => {
     if (!formIsValid) {
       return;
     }
-    // submit the cart data
+    onConfirm({
+      name: enteredName,
+      street: enteredStreet,
+      city: enteredCity,
+      postalCode: enteredPostalCode,
+    });
   };
 
   const nameControlClasses = `${styles.control} ${

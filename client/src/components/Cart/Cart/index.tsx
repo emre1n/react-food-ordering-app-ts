@@ -7,6 +7,13 @@ import Checkout from '../Checkout';
 import styles from './styles.module.css';
 import CartContext from '../../../store/cart-context';
 
+type TUserData = {
+  name: string;
+  street: string;
+  city: string;
+  postalCode: string;
+};
+
 type TProps = {
   onClose: () => void;
 };
@@ -28,6 +35,35 @@ const Cart = ({ onClose }: TProps) => {
 
   const orderHandler = () => {
     setIsCheckout(true);
+  };
+
+  const submitOrderHandler = (userData: TUserData) => {
+    const generateCartSummary = (cartItems: ICartItem[]): string => {
+      let grandTotal = 0;
+
+      const summary = cartItems
+        .map(item => {
+          const itemTotal = item.amount * item.price;
+          grandTotal += itemTotal;
+          return `${item.amount} x ${item.name} - ${itemTotal}`;
+        })
+        .join(', ');
+
+      return `${summary}, Total: USD ${grandTotal}`;
+    };
+
+    const cartSummary = generateCartSummary(cartCtx.items);
+
+    fetch('', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: userData.name,
+        street: userData.street,
+        city: userData.city,
+        postalCode: userData.postalCode,
+        cartSummary: cartSummary,
+      }),
+    });
   };
 
   const cartItems = (
@@ -68,7 +104,9 @@ const Cart = ({ onClose }: TProps) => {
           <span>Total Amount</span>
           <span>{totalAmount}</span>
         </div>
-        {isCheckout && <Checkout onCancel={onClose} />}
+        {isCheckout && (
+          <Checkout onConfirm={submitOrderHandler} onCancel={onClose} />
+        )}
         {!isCheckout && modalActions}
       </>
     </Modal>
