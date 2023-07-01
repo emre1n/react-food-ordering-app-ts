@@ -23,3 +23,13 @@ model Cartitem {
   amount Int
   price  Float  @db.DoublePrecision
 }
+
+model Order {
+  id          Int    @id @default(autoincrement())
+  name        String
+  street      String
+  city        String
+  postalCode  String
+  cartSummary String
+  cartTotal   Float  @db.DoublePrecision
+}

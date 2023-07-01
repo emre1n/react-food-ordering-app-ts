@@ -38,7 +38,9 @@ const Cart = ({ onClose }: TProps) => {
   };
 
   const submitOrderHandler = (userData: TUserData) => {
-    const generateCartSummary = (cartItems: ICartItem[]): string => {
+    const generateCartSummary = (
+      cartItems: ICartItem[]
+    ): { summary: string; cartTotal: string } => {
       let grandTotal = 0;
 
       const summary = cartItems
@@ -49,7 +51,10 @@ const Cart = ({ onClose }: TProps) => {
         })
         .join(', ');
 
-      return `${summary}, Total: USD ${grandTotal}`;
+      return {
+        summary: `${summary}, Total: USD ${grandTotal}`,
+        cartTotal: `${grandTotal}`,
+      };
     };
 
     const cartSummary = generateCartSummary(cartCtx.items);
@@ -61,7 +66,8 @@ const Cart = ({ onClose }: TProps) => {
         street: userData.street,
         city: userData.city,
         postalCode: userData.postalCode,
-        cartSummary: cartSummary,
+        cartSummary: cartSummary.summary,
+        cartTotal: cartSummary.cartTotal,
       }),
     });
   };
