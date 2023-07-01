@@ -58,6 +58,7 @@ const Cart = ({ onClose }: TProps) => {
     };
 
     const cartSummary = generateCartSummary(cartCtx.items);
+    const currentDate = new Date();
 
     fetch('', {
       method: 'POST',
@@ -68,6 +69,7 @@ const Cart = ({ onClose }: TProps) => {
         postalCode: userData.postalCode,
         cartSummary: cartSummary.summary,
         cartTotal: cartSummary.cartTotal,
+        orderDate: currentDate.toISOString(),
       }),
     });
   };
