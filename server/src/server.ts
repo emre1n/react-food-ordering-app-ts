@@ -3,6 +3,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 
 import { mealRouter } from './meals/author.router';
+import { orderRouter } from './order/order.router';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/api/meals', mealRouter);
+app.use('/api/orders', orderRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is up on http://localhost:${PORT}`);
