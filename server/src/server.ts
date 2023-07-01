@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 
-import { mealRouter } from './meals/author.router';
+import { mealRouter } from './meal/meal.router';
 import { orderRouter } from './order/order.router';
 
 dotenv.config();

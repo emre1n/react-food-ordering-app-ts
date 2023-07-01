@@ -2,7 +2,7 @@ import express from 'express';
 import type { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 
-import * as MealService from './meals.service';
+import * as MealService from './meal.service';
 
 export const mealRouter = express.Router();
 
