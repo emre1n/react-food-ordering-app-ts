@@ -60,7 +60,7 @@ const Cart = ({ onClose }: TProps) => {
     const cartSummary = generateCartSummary(cartCtx.items);
     const currentDate = new Date();
 
-    fetch('', {
+    fetch('http://localhost:5000/api/orders', {
       method: 'POST',
       body: JSON.stringify({
         name: userData.name,
