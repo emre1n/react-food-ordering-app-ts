@@ -62,6 +62,9 @@ const Cart = ({ onClose }: TProps) => {
 
     fetch('http://localhost:5000/api/orders', {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Added Content-Type header
+      },
       body: JSON.stringify({
         name: userData.name,
         street: userData.street,
