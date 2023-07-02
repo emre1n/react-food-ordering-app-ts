@@ -7,6 +7,8 @@ import Checkout from '../Checkout';
 import styles from './styles.module.css';
 import CartContext from '../../../store/cart-context';
 
+import generateCartSummary from '../../../libs/helpers/generateCartSummary';
+
 type TUserData = {
   name: string;
   street: string;
@@ -20,6 +22,8 @@ type TProps = {
 
 const Cart = ({ onClose }: TProps) => {
   const [isCheckout, setIsCheckout] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const cartCtx = useContext(CartContext);
 
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
@@ -38,24 +42,7 @@ const Cart = ({ onClose }: TProps) => {
   };
 
   const submitOrderHandler = (userData: TUserData) => {
-    const generateCartSummary = (
-      cartItems: ICartItem[]
-    ): { summary: string; cartTotal: string } => {
-      let grandTotal = 0;
-
-      const summary = cartItems
-        .map(item => {
-          const itemTotal = item.amount * item.price;
-          grandTotal += itemTotal;
-          return `${item.amount} x ${item.name} - ${itemTotal}`;
-        })
-        .join(', ');
-
-      return {
-        summary: `${summary}, Total: USD ${grandTotal}`,
-        cartTotal: `${grandTotal}`,
-      };
-    };
+    setIsSubmitting(true);
 
     const cartSummary = generateCartSummary(cartCtx.items);
     const currentDate = new Date();
