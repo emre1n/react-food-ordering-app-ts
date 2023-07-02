@@ -23,6 +23,7 @@ type TProps = {
 const Cart = ({ onClose }: TProps) => {
   const [isCheckout, setIsCheckout] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [didSubmit, setDidSubmit] = useState(false);
 
   const cartCtx = useContext(CartContext);
 
@@ -41,13 +42,13 @@ const Cart = ({ onClose }: TProps) => {
     setIsCheckout(true);
   };
 
-  const submitOrderHandler = (userData: TUserData) => {
+  const submitOrderHandler = async (userData: TUserData) => {
     setIsSubmitting(true);
 
     const cartSummary = generateCartSummary(cartCtx.items);
     const currentDate = new Date();
 
-    fetch('http://localhost:5000/api/orders', {
+    await fetch('http://localhost:5000/api/orders', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Added Content-Type header
@@ -62,6 +63,8 @@ const Cart = ({ onClose }: TProps) => {
         orderDate: currentDate.toISOString(),
       }),
     });
+    setIsSubmitting(false);
+    setDidSubmit(true);
   };
 
   const cartItems = (
@@ -94,18 +97,39 @@ const Cart = ({ onClose }: TProps) => {
     </div>
   );
 
+  const cartModalContent = (
+    <>
+      {cartItems}
+      <div className={styles.total}>
+        <span>Total Amount</span>
+        <span>{totalAmount}</span>
+      </div>
+      {isCheckout && (
+        <Checkout onConfirm={submitOrderHandler} onCancel={onClose} />
+      )}
+      {!isCheckout && modalActions}
+    </>
+  );
+
+  const isSubmittingModalContent = <p>Sending order data...</p>;
+
+  const didSubmitModalContent = (
+    <>
+      <p>Successfully sent the order!</p>
+      <div className={styles.actions}>
+        <button className={styles.button} onClick={onClose}>
+          Close
+        </button>
+      </div>
+    </>
+  );
+
   return (
     <Modal onClose={onClose}>
       <>
-        {cartItems}
-        <div className={styles.total}>
-          <span>Total Amount</span>
-          <span>{totalAmount}</span>
-        </div>
-        {isCheckout && (
-          <Checkout onConfirm={submitOrderHandler} onCancel={onClose} />
-        )}
-        {!isCheckout && modalActions}
+        {!isSubmitting && !didSubmit && cartModalContent}
+        {isSubmitting && isSubmittingModalContent}
+        {!isSubmitting && didSubmit && didSubmitModalContent}
       </>
     </Modal>
   );
