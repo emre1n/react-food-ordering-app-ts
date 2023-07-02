@@ -13,7 +13,7 @@ interface ICartState {
 
 interface ICartAction {
   type: string;
-  item: ICartItem;
+  item?: ICartItem;
 }
 
 const defaultCartState = {
@@ -23,11 +23,14 @@ const defaultCartState = {
 
 const cartReducer = (state: ICartState, action: ICartAction) => {
   if (action.type === 'ADD') {
+    if (!action.item) {
+      return state;
+    }
     const updatedTotalAmount =
       state.totalAmount + action.item.price * action.item.amount;
 
     const existingCartItemIndex = state.items.findIndex(
-      item => item.id === action.item.id
+      item => item.id === (action.item ? action.item.id : '')
     );
     const existingCartItem = state.items[existingCartItemIndex];
     let updatedItems;
@@ -50,14 +53,19 @@ const cartReducer = (state: ICartState, action: ICartAction) => {
   }
 
   if (action.type === 'REMOVE') {
+    if (!action.item) {
+      return state;
+    }
     const existingCartItemIndex = state.items.findIndex(
-      item => item.id === action.item.id
+      item => item.id === (action.item ? action.item.id : '')
     );
     const existingItem = state.items[existingCartItemIndex];
     const updatedTotalAmount = state.totalAmount - existingItem.price;
     let updatedItems;
     if (existingItem.amount === 1) {
-      updatedItems = state.items.filter(item => item.id !== action.item.id);
+      updatedItems = state.items.filter(
+        item => item.id !== (action.item ? action.item.id : '')
+      );
     } else {
       const updatedItem = { ...existingItem, amount: existingItem.amount - 1 };
       updatedItems = [...state.items];
@@ -69,6 +77,11 @@ const cartReducer = (state: ICartState, action: ICartAction) => {
       totalAmount: updatedTotalAmount,
     };
   }
+
+  if (action.type === 'CLEAR') {
+    return defaultCartState;
+  }
+
   return defaultCartState;
 };
 
@@ -86,11 +99,16 @@ const CartProvider = ({ children }: TProps) => {
     dispatchCartAction({ type: 'REMOVE', item: item });
   };
 
+  const clearCartHandler = () => {
+    dispatchCartAction({ type: 'CLEAR' });
+  };
+
   const cartContext = {
     items: cartState.items,
     totalAmount: cartState.totalAmount,
     addItem: addItemToCartHandler,
     removeItem: removeItemFromCartHandler,
+    clearCart: clearCartHandler,
   };
 
   return (

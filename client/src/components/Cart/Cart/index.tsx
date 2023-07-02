@@ -65,6 +65,7 @@ const Cart = ({ onClose }: TProps) => {
     });
     setIsSubmitting(false);
     setDidSubmit(true);
+    cartCtx.clearCart();
   };
 
   const cartItems = (

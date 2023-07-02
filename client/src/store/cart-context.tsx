@@ -6,6 +6,7 @@ type TCartContext = {
   totalAmount: number;
   addItem: (item: ICartItem) => void;
   removeItem: (item: ICartItem) => void;
+  clearCart: () => void;
 };
 
 const initialState: TCartContext = {
@@ -13,6 +14,7 @@ const initialState: TCartContext = {
   totalAmount: 0,
   addItem: () => {},
   removeItem: () => {},
+  clearCart: () => {},
 };
 
 const CartContext = React.createContext<TCartContext>(initialState);
